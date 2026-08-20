@@ -13,7 +13,7 @@
     "clean": "rimraf dist node_modules"
   },
   "dependencies": {
-    "lucide-react": "^0.474.0",
+    "lucide-react": "^0.577.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "peerDependencies": {
