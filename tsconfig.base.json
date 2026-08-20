@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "sourceMap": true,
+    "composite": false,
+    "incremental": false,
+    "baseUrl": ".",
+    "paths": {
+      "@bbrains/ui": ["packages/ui/src"],
+      "@bbrains/ui/*": ["packages/ui/src/*"],
+      "@bbrains/types": ["packages/types/src"],
+      "@bbrains/types/*": ["packages/types/src/*"],
+      "@bbrains/validators": ["packages/validators/src"],
+      "@bbrains/validators/*": ["packages/validators/src/*"],
+      "@bbrains/utils": ["packages/utils/src"],
+      "@bbrains/utils/*": ["packages/utils/src/*"],
+      "@bbrains/database": ["packages/database/src"],
+      "@bbrains/database/*": ["packages/database/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build", ".next", ".turbo"]
+}

@@ -1,0 +1,30 @@
+// BBrains database schema (Prisma).
+//
+// This schema uses PostgreSQL domain schemas to keep the wallet/ledger ACID-safe
+// within a single database. Add entity models under each domain schema as you
+// build each module.
+//
+//   identity      -> users, institutions, roles, sessions
+//   academics     -> courses, enrollments, assignments, quizzes, grades
+//   gamification  -> user_stats, xp_transactions, achievements, streaks
+//   economy       -> wallets, bpoints_transactions, products, orders
+//   communication -> channels, messages, friends
+//   campus        -> attendance_records, library, canteen, events
+//   audit         -> audit_logs
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["identity", "academics", "gamification", "economy", "communication", "campus", "audit"]
+}
+
+// model User {
+//   id        String   @id @default(uuid())
+//   username  String   @unique
+//   ...
+//   @@schema("identity")
+// }

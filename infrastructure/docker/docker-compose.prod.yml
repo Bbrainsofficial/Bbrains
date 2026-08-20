@@ -1,0 +1,146 @@
+version: "3.9"
+
+# Production / self-hosted deployment template.
+# Requires a `.env` with real secrets. Enable the Caddy/Traefik reverse proxy
+# below for automatic TLS.
+
+name: bbrains-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio-data:/data
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
+    volumes:
+      - meili-data:/meili_data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: unless-stopped
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  livekit:
+    image: livekit/livekit-server:latest
+    restart: unless-stopped
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml
+    command: --config /etc/livekit.yaml
+
+  judge0:
+    image: judge0/judge0:1.13.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: judge0
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - judge0-data:/opt/judge0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # Reverse proxy with automatic TLS (Let's Encrypt)
+  # proxy:
+  #   image: caddy:2
+  #   restart: unless-stopped
+  #   environment:
+  #     API_URL: ${PUBLIC_API_URL}
+  #     WEB_URL: ${PUBLIC_WEB_URL}
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy-data:/data
+  #   depends_on: [api, web]
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.api
+      args:
+        - COMMIT_SHA=${COMMIT_SHA:-latest}
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    expose:
+      - "4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+
+  ai-service:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.ai-service
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    expose:
+      - "5000"
+    depends_on:
+      qdrant:
+        condition: service_started
+
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.web
+      args:
+        - NEXT_PUBLIC_API_URL=${PUBLIC_API_URL}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:
+  meili-data:
+  qdrant-data:
+  judge0-data:
+  caddy-data:

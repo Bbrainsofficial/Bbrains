@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@bbrains/database": ["../../packages/database/src"],
+      "@bbrains/database/*": ["../../packages/database/src/*"],
+      "@bbrains/types": ["../../packages/types/src"],
+      "@bbrains/validators": ["../../packages/validators/src"],
+      "@bbrains/utils": ["../../packages/utils/src"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test"]
+}

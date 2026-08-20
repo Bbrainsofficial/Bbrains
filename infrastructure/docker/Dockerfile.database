@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+FROM node:20-alpine
+RUN corepack enable
+WORKDIR /repo
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
+COPY packages ./packages
+COPY packages/database/prisma ./packages/database/prisma
+RUN pnpm install --frozen-lockfile
+CMD ["sh", "-c", "pnpm --filter @bbrains/database db:deploy && pnpm --filter @bbrains/database db:seed"]

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerabilities
+    url: https://github.com/bbrains/bbrains/security/advisories
+    about: Please report security issues privately through GitHub Security Advisories (see SECURITY.md).
+  - name: Feedback for the BBrains team
+    url: https://github.com/bbrains/bbrains/discussions
+    about: Ideas, questions, and general discussion about the BBrains platform.
+  - name: Community / support
+    url: https://discord.gg/bbrains
+    about: Join our community Discord for help and announcements.

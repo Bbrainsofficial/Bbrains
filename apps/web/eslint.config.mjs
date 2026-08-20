@@ -1,0 +1,6 @@
+export default {
+  extends: ["next/core-web-vitals", "prettier"],
+  rules: {
+    "no-console": ["warn", { allow: ["warn", "error"] }],
+  },
+};

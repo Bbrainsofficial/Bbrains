@@ -1,0 +1,19 @@
+{
+  "name": "@bbrains/config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared configuration presets — ESLint, TypeScript, Tailwind — for BBrains.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "exit 0",
+    "test": "exit 0",
+    "clean": "rimraf dist node_modules"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.3"
+  }
+}

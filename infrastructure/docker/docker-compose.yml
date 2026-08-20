@@ -1,0 +1,179 @@
+version: "3.9"
+
+name: bbrains
+
+services:
+  # ----------------------------------------------------------
+  # Data stores
+  # ----------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: bbrains-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bbrains
+      POSTGRES_PASSWORD: bbrains
+      POSTGRES_DB: bbrains
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bbrains"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: valkey/valkey:8-alpine
+    container_name: bbrains-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: bbrains-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    container_name: bbrains-meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: change-me
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili-data:/meili_data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: bbrains-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  # ----------------------------------------------------------
+  # Real-time media (LiveKit)
+  # ----------------------------------------------------------
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: bbrains-livekit
+    restart: unless-stopped
+    command: --dev
+    ports:
+      - "7880:7880"
+      - "7881:7881"
+
+  # ----------------------------------------------------------
+  # Code execution sandbox (Judge0)
+  # ----------------------------------------------------------
+  judge0:
+    image: judge0/judge0:1.13.1
+    container_name: bbrains-judge0
+    restart: unless-stopped
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: bbrains
+      POSTGRES_PASSWORD: bbrains
+      POSTGRES_DB: judge0
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "2358:2358"
+    volumes:
+      - judge0-data:/opt/judge0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:2358/about"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ----------------------------------------------------------
+  # First boot setup — apply schema migrations and seed
+  # ----------------------------------------------------------
+  db-setup:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.database
+    container_name: bbrains-db-setup
+    env_file:
+      - ../../.env
+    command: sh -c "pnpm db:deploy && pnpm db:seed"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ----------------------------------------------------------
+  # Applications
+  # ----------------------------------------------------------
+  api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.api
+    container_name: bbrains-api
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  ai-service:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.ai-service
+    container_name: bbrains-ai-service
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      qdrant:
+        condition: service_started
+
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.web
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:4000
+    container_name: bbrains-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:
+  meili-data:
+  qdrant-data:
+  judge0-data:

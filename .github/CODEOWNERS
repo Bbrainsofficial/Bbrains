@@ -1,0 +1,34 @@
+# Global owners (required on all PRs)
+* @bbrains/core-maintainers
+
+# Service / API ownership
+/services/api/src/modules/auth/        @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/roles/       @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/economy/     @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/wallet/      @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/payments/    @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/audit/       @bbrains/backend-lead @bbrains/security
+/services/api/src/modules/courses/     @bbrains/backend-lead
+/services/api/src/modules/attendance/  @bbrains/backend-lead
+/services/api/src/modules/gamification/ @bbrains/backend-lead
+/services/ai-service/                  @bbrains/ai-team
+/services/code-runner/                 @bbrains/backend-lead
+/services/realtime-media/              @bbrains/backend-lead
+/services/realtime-media/              @bbrains/media-lead
+
+# Applications
+/apps/web/                             @bbrains/frontend-lead
+/apps/mobile/                          @bbrains/mobile-lead
+/apps/landing/                         @bbrains/frontend-lead
+
+# Shared packages
+/packages/ui/                          @bbrains/design-system
+/packages/types/                       @bbrains/core-maintainers
+/packages/validators/                  @bbrains/core-maintainers
+/packages/database/                    @bbrains/backend-lead
+/packages/config/                      @bbrains/core-maintainers
+
+# Infrastructure & governance
+/infrastructure/                       @bbrains/devops
+/.github/                              @bbrains/core-maintainers
+/docs/                                 @bbrains/docs-team

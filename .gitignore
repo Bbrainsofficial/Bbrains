@@ -141,3 +141,52 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# ============================================================
+# BBrains monorepo additions
+# ============================================================
+
+# Turborepo
+.turbo
+turbo-cache/
+
+# Next.js
+next-env.d.ts
+out/
+apps/**/.next/
+
+# Expo / React Native
+.expo
+.expo-shared/
+.expo-secrets
+apps/mobile/ios/
+apps/mobile/android/
+apps/mobile/web-build/
+
+# NestJS / Node
+dist/
+build/
+tmp/
+*.tsbuildinfo
+apps/**/tsconfig.build.tsbuildinfo
+
+# Prisma
+packages/database/prisma/migrations/**/dev.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Judge0 / sandbox artifacts
+services/code-runner/tmp/
+services/code-runner/bin/
+
+# Test output
+coverage/
+playwright-report/
+test-results/

@@ -1,0 +1,91 @@
+# Config for actions/labeler in .github/workflows/pr-validation.yml
+# Adds module labels automatically based on changed paths.
+
+services/api/src/modules/auth/:
+  - module:auth
+services/api/src/modules/users/:
+  - module:auth
+services/api/src/modules/roles/:
+  - module:roles
+services/api/src/modules/courses/:
+  - module:lms-core
+services/api/src/modules/assignments/:
+  - module:lms-core
+services/api/src/modules/quizzes/:
+  - module:lms-core
+services/api/src/modules/exams/:
+  - module:lms-core
+services/api/src/modules/grades/:
+  - module:lms-core
+services/api/src/modules/announcements/:
+  - module:lms-core
+services/api/src/modules/gamification/:
+  - module:gamification
+services/api/src/modules/achievements/:
+  - module:gamification
+services/api/src/modules/streaks/:
+  - module:gamification
+services/api/src/modules/leaderboards/:
+  - module:gamification
+services/api/src/modules/economy/:
+  - module:economy
+services/api/src/modules/wallet/:
+  - module:economy
+services/api/src/modules/marketplace/:
+  - module:economy
+services/api/src/modules/stockmarket/:
+  - module:economy
+services/api/src/modules/giveaways/:
+  - module:economy
+services/api/src/modules/payments/:
+  - module:payments
+services/api/src/modules/chat/:
+  - module:chat
+services/api/src/modules/forum/:
+  - module:chat
+services/api/src/modules/livestream/:
+  - module:livestream
+services/api/src/modules/council/:
+  - module:chat
+services/api/src/modules/friends/:
+  - module:chat
+services/api/src/modules/attendance/:
+  - module:attendance
+services/api/src/modules/library/:
+  - module:library
+services/api/src/modules/canteen/:
+  - module:canteen
+services/api/src/modules/events/:
+  - module:events
+services/api/src/modules/projects/:
+  - module:projects
+services/api/src/modules/whiteboard/:
+  - module:whiteboard
+services/api/src/modules/audit/:
+  - module:audit
+services/api/src/modules/analytics/:
+  - module:analytics
+services/api/src/modules/notifications/:
+  - module:notifications
+services/api/src/modules/ai/:
+  - module:ai
+services/ai-service/:
+  - module:ai
+services/code-runner/:
+  - module:code-runner
+services/realtime-media/:
+  - module:media
+apps/web/:
+  - module:web
+apps/mobile/:
+  - module:mobile
+apps/landing/:
+  - module:landing
+packages/database/:
+  - module:db
+infrastructure/:
+  - module:infra
+packages/ui/:
+  - module:ui
+docs/:
+  - type:docs

@@ -1,0 +1,23 @@
+[project]
+name = "bbrains-ai-service"
+version = "0.1.0"
+description = "BBrains AI assistant service — document ingestion, embeddings, and LLM-powered Q&A."
+requires-python = ">=3.11"
+license = { text = "AGPL-3.0-only" }
+dependencies = []
+
+[tool.poetry]
+name = "bbrains-ai-service"
+version = "0.1.0"
+description = "BBrains AI assistant service"
+authors = ["BBrains team"]
+license = "AGPL-3.0-only"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "B", "C4", "UP"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

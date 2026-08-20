@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "allowJs": true,
+    "jsx": "react-native",
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "types": ["jest"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@bbrains/types": ["../../packages/types/src"],
+      "@bbrains/utils": ["../../packages/utils/src"],
+      "@bbrains/validators": ["../../packages/validators/src"]
+    }
+  },
+  "include": ["src", "app.config.ts", "babel.config.js", "metro.config.js"],
+  "exclude": ["node_modules"]
+}
