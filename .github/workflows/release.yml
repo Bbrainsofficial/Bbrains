@@ -18,7 +18,7 @@ jobs:
 
       - name: Docker meta (api)
         id: meta-api
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}/api
           tags: |
@@ -28,7 +28,7 @@ jobs:
 
       - name: Docker meta (web)
         id: meta-web
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}/web
           tags: |
@@ -38,7 +38,7 @@ jobs:
 
       - name: Docker meta (ai-service)
         id: meta-ai
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}/ai-service
           tags: |
