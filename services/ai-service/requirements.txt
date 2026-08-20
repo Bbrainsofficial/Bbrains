@@ -9,7 +9,7 @@ langchain-community==0.3.14
 langchain-ollama==0.2.2
 
 # PDFs & documents
-pymupdf==1.25.1
+pymupdf==1.28.2
 pypdf==5.1.0
 
 # Embeddings / vector storage
